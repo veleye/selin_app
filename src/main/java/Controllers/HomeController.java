@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +33,20 @@ public class HomeController {
         Student student = connection.findById(1L);
         messageObject.put("name", student.getName());
         messageObject.put("job", student.getPassportNumber());
+        return ResponseEntity.ok(messageObject) ;
+    }
+//@RequestParam("name") String name
+    @CrossOrigin(origins = "http://localhost:3000")
+    @RequestMapping("/insertStudent")
+    @ResponseBody
+    ResponseEntity<?> insertStudent(@RequestBody Student student) {
+        final Map<String, Integer> messageObject = new HashMap<>();
+        Student newStudent = new Student();
+        newStudent.setId(student.getId());
+        newStudent.setName(student.getName());
+        newStudent.setPassportNumber(student.getPassportNumber());
+        int isOk = connection.insertStudent(newStudent);
+        messageObject.put("isOk", isOk);
         return ResponseEntity.ok(messageObject) ;
     }
 
